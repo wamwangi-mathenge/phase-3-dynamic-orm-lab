@@ -52,5 +52,20 @@ class InteractiveRecord
         sql = "SELECT * FROM #{self.table_name} WHERE name = ?"
         DB[:conn].execute(sql, name)
     end
+
+    def self.find_by(attribute_hash)
+        attribute_name, attribute_value = attribute_hash.first
+        if attribute_value.is_a?(Integer)
+          sql_query = "SELECT * FROM students WHERE #{attribute_name} = #{attribute_value} LIMIT 1;"
+        else
+          sql_query = "SELECT * FROM students WHERE #{attribute_name} = '#{attribute_value}' LIMIT 1;"
+        end
+        result = DB[:conn].execute(sql_query)
+        if result.any?
+          result.first
+        else
+          nil
+        end
+    end
   
 end
